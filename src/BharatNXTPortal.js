@@ -67,30 +67,6 @@ const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, s
     }
   };
 
-  const handleOnboardingSubmit = async () => {
-    try {
-      const response = await fetch('/api/vendors', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': localStorage.getItem('jwtToken')
-        },
-        body: JSON.stringify(vendorData)
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert('Vendor data submitted successfully!');
-        // Optionally, clear the form or switch tab
-        setCurrentTab('dashboard');
-      } else {
-        alert(`Submission failed: ${data.message}`);
-      }
-    } catch (error) {
-      console.error('Onboarding submission error:', error);
-      alert('Network error or server unavailable during submission.');
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <motion.div
@@ -197,6 +173,21 @@ const BharatNXTPortal = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isLoginView, setIsLoginView] = useState(true);
+
+  const [profileTab, setProfileTab] = useState('overview');
+  const [aiRiskLoading, setAiRiskLoading] = useState(false);
+  const [aiRisk, setAiRisk] = useState(null);
+  const [timelineLoading, setTimelineLoading] = useState(false);
+  const [timeline, setTimeline] = useState([]);
+  const [endorseInput, setEndorseInput] = useState('');
+  const [endorsementsLoading, setEndorsementsLoading] = useState(false);
+  const [endorsements, setEndorsements] = useState([]);
+  const [qaInput, setQaInput] = useState('');
+  const [qaLoading, setQaLoading] = useState(false);
+  const [qa, setQa] = useState([]);
+  const [compareSelection, setCompareSelection] = useState([]);
+  const [comparisonLoading, setComparisonLoading] = useState(false);
+  const [comparison, setComparison] = useState(null);
 
   // Mock data for charts and analytics
   const [analyticsData] = useState({
@@ -694,7 +685,7 @@ const BharatNXTPortal = () => {
     </motion.div>
   );
 
-  const OnboardingForm = () => (
+  const OnboardingForm = ({ onOnboardingSubmit }) => (
     <motion.div
       key="onboarding-content"
       initial={{ opacity: 0, y: 20 }}
@@ -802,7 +793,7 @@ const BharatNXTPortal = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={handleOnboardingSubmit}
+                onClick={onOnboardingSubmit} 
                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-transform transform hover:scale-105"
               >
                 Submit Onboarding Data
@@ -1183,6 +1174,30 @@ const BharatNXTPortal = () => {
     setIsAuthenticated(false);
   };
 
+  const handleOnboardingSubmit = async () => {
+    try {
+      const response = await fetch('/api/vendors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('jwtToken')
+        },
+        body: JSON.stringify(vendorData)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert('Vendor data submitted successfully!');
+        // Optionally, clear the form or switch tab
+        setCurrentTab('dashboard');
+      } else {
+        alert(`Submission failed: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Onboarding submission error:', error);
+      alert('Network error or server unavailable during submission.');
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <AuthForm 
@@ -1238,7 +1253,7 @@ const BharatNXTPortal = () => {
         <main className="flex-1 p-8 overflow-y-auto">
           <AnimatePresence mode="wait">
             {currentTab === 'dashboard' && <EnhancedDashboard key="dashboard" />}
-            {currentTab === 'onboarding' && <OnboardingForm key="onboarding" />}
+            {currentTab === 'onboarding' && <OnboardingForm onOnboardingSubmit={handleOnboardingSubmit} />}
             {currentTab === 'vendors' && (
               viewedVendor ? <VendorProfile key="vendor-profile" vendor={viewedVendor} /> : <VendorDirectory key="vendor-directory" />
             )}
