@@ -19,7 +19,7 @@ const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, s
     e.preventDefault();
     setAuthError('');
     try {
-      const response = await fetch('http://localhost:4000/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -41,7 +41,7 @@ const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, s
     e.preventDefault();
     setAuthError('');
     try {
-      const response = await fetch('http://localhost:4000/api/auth/register', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -64,6 +64,30 @@ const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, s
       handleLogin(e);
     } else {
       handleRegister(e);
+    }
+  };
+
+  const handleOnboardingSubmit = async () => {
+    try {
+      const response = await fetch('/api/vendors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('jwtToken')
+        },
+        body: JSON.stringify(vendorData)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert('Vendor data submitted successfully!');
+        // Optionally, clear the form or switch tab
+        setCurrentTab('dashboard');
+      } else {
+        alert(`Submission failed: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Onboarding submission error:', error);
+      alert('Network error or server unavailable during submission.');
     }
   };
 
@@ -772,6 +796,17 @@ const BharatNXTPortal = () => {
                 />
               </div>
               <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">60% Complete (Mocked)</div>
+            </div>
+            {/* Submit Button */}
+            <div className="pt-4 flex justify-end">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleOnboardingSubmit}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+              >
+                Submit Onboarding Data
+              </motion.button>
             </div>
           </div>
         </div>
