@@ -6,7 +6,7 @@ import {
   Bell, X, ArrowUp, ArrowDown,
   User, ChevronLeft, Moon, Sun, UploadCloud, Loader2, Users as UsersIcon, LogOut
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, RechartsPieChart, Cell, Area, Pie } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell, Area, Pie } from 'recharts';
 
 const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, setIsLoginView }) => {
   const [email, setEmail] = useState('');
