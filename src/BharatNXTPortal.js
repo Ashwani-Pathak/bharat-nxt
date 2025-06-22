@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Building2, CheckCircle, AlertTriangle, Clock, Star, Shield, TrendingUp, MapPin,
+  Building2, CheckCircle, Star, Shield, TrendingUp, MapPin,
   DollarSign, BarChart3, Zap, ThumbsUp, ThumbsDown,
   Bell, X, ArrowUp, ArrowDown,
   User, ChevronLeft, Moon, Sun, UploadCloud, Loader2, Users as UsersIcon, LogOut
@@ -150,7 +150,6 @@ const BharatNXTPortal = () => {
     employeeCount: '',
     documents: []
   });
-  const [verificationStatus, setVerificationStatus] = useState({});
   const [vendors, setVendors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
