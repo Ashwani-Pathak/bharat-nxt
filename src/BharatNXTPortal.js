@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Building2, FileText, CheckCircle, AlertTriangle, Clock, Star, Globe, Shield, Users, Download,
-  Search, Filter, Upload, Mail, Phone, ExternalLink, TrendingUp, AlertCircle, MapPin, Calendar,
-  DollarSign, BarChart3, Activity, Award, Target, Zap, Eye, ThumbsUp, ThumbsDown, RefreshCw,
-  Settings, Bell, Menu, X, ChevronRight, ChevronDown, ArrowUp, ArrowDown, Briefcase, CreditCard,
-  Database, FileCheck, Layers, Lock, MessageSquare, Percent, ShoppingCart, Truck, Wifi, WifiOff,
-  Camera, Mic, Video, Heart, Share2, BookOpen, Coffee, Home, Plus, Minus, Edit, Trash2, Save,
-  Info, HelpCircle, Maximize2, Minimize2, User, ChevronLeft, Moon, Sun, UploadCloud, Loader2, MessageCircle, Users as UsersIcon, LogOut
+  Building2, CheckCircle, AlertTriangle, Clock, Star, Shield, TrendingUp, MapPin,
+  DollarSign, BarChart3, Zap, ThumbsUp, ThumbsDown,
+  Bell, X, ArrowUp, ArrowDown,
+  User, ChevronLeft, Moon, Sun, UploadCloud, Loader2, Users as UsersIcon, LogOut
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell, AreaChart, Area, RadialBarChart, RadialBar, ScatterChart, Scatter, Pie } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, RechartsPieChart, Cell, Area, Pie } from 'recharts';
 
 const AuthForm = ({ onLogin, onRegister, authError, setAuthError, isLoginView, setIsLoginView }) => {
   const [email, setEmail] = useState('');
@@ -154,18 +151,13 @@ const BharatNXTPortal = () => {
     documents: []
   });
   const [verificationStatus, setVerificationStatus] = useState({});
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [verificationProgress, setVerificationProgress] = useState(0);
   const [vendors, setVendors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedDateRange, setSelectedDateRange] = useState('7d');
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedVendor, setSelectedVendor] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [vendorTab, setVendorTab] = useState('directory');
   const [viewedVendor, setViewedVendor] = useState(null);
   const [ocrResult, setOcrResult] = useState('');
   const [ocrLoading, setOcrLoading] = useState(false);
@@ -175,10 +167,10 @@ const BharatNXTPortal = () => {
   const [isLoginView, setIsLoginView] = useState(true);
 
   const [profileTab, setProfileTab] = useState('overview');
-  const [aiRiskLoading, setAiRiskLoading] = useState(false);
-  const [aiRisk, setAiRisk] = useState(null);
-  const [timelineLoading, setTimelineLoading] = useState(false);
-  const [timeline, setTimeline] = useState([]);
+  const aiRiskLoading = false;
+  const aiRisk = null;
+  const timelineLoading = false;
+  const timeline = [];
   const [endorseInput, setEndorseInput] = useState('');
   const [endorsementsLoading, setEndorsementsLoading] = useState(false);
   const [endorsements, setEndorsements] = useState([]);
@@ -186,8 +178,8 @@ const BharatNXTPortal = () => {
   const [qaLoading, setQaLoading] = useState(false);
   const [qa, setQa] = useState([]);
   const [compareSelection, setCompareSelection] = useState([]);
-  const [comparisonLoading, setComparisonLoading] = useState(false);
-  const [comparison, setComparison] = useState(null);
+  const comparisonLoading = false;
+  const comparison = null;
 
   // Mock data for charts and analytics
   const [analyticsData] = useState({
@@ -334,60 +326,6 @@ const BharatNXTPortal = () => {
     }
   }, []);
 
-  const startVerification = () => {
-    setIsVerifying(true);
-    setVerificationProgress(0);
-    
-    const steps = [
-      { key: 'gstin', delay: 1000, status: 'verified' },
-      { key: 'gstReturns', delay: 2000, status: 'verified' },
-      { key: 'udyam', delay: 3000, status: 'warning' },
-      { key: 'reputation', delay: 4000, status: 'verified' },
-      { key: 'ecommerce', delay: 5000, status: 'verified' },
-      { key: 'compliance', delay: 6000, status: 'verified' },
-      { key: 'directors', delay: 7000, status: 'verified' },
-      { key: 'financial', delay: 8000, status: 'verified' }
-    ];
-
-    steps.forEach((step, index) => {
-      setTimeout(() => {
-        setVerificationStatus(prev => ({
-          ...prev,
-          [step.key]: step.status
-        }));
-        setVerificationProgress(((index + 1) / steps.length) * 100);
-        
-        if (index === steps.length - 1) {
-          setIsVerifying(false);
-          const newVendor = {
-            id: Date.now(),
-            ...vendorData,
-            verificationStatus: { ...verificationStatus, [step.key]: step.status },
-            score: Math.floor(Math.random() * 20) + 80,
-            createdAt: new Date().toISOString(),
-            lastUpdated: new Date().toISOString(),
-            riskLevel: 'Low',
-            rating: 4.0 + Math.random() * 1,
-            reviewCount: Math.floor(Math.random() * 200) + 50,
-            contractValue: '₹' + (Math.random() * 5 + 1).toFixed(1) + ' Cr',
-            paymentHistory: 'Good',
-            certifications: ['ISO 9001']
-          };
-          setVendors(prev => [...prev, newVendor]);
-        }
-      }, step.delay);
-    });
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'verified': return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'warning': return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      case 'pending': return <Clock className="w-5 h-5 text-blue-500" />;
-      default: return <Clock className="w-5 h-5 text-gray-400" />;
-    }
-  };
-
   const getStatusBadge = (score) => {
     if (score >= 80) return { text: 'Verified', color: 'bg-green-100 text-green-800', dotColor: 'bg-green-500' };
     if (score >= 60) return { text: 'At Risk', color: 'bg-yellow-100 text-yellow-800', dotColor: 'bg-yellow-500' };
@@ -411,9 +349,9 @@ const BharatNXTPortal = () => {
     if (filterStatus === 'all') return matchesSearch;
     
     const badge = getStatusBadge(vendor.score);
-    const statusMatch = filterStatus === 'verified' && badge.text === 'Verified' ||
-                       filterStatus === 'warning' && badge.text === 'At Risk' ||
-                       filterStatus === 'high-risk' && badge.text === 'High Risk';
+    const statusMatch = (filterStatus === 'verified' && badge.text === 'Verified') ||
+                       (filterStatus === 'warning' && badge.text === 'At Risk') ||
+                       (filterStatus === 'high-risk' && badge.text === 'High Risk');
     
     return matchesSearch && statusMatch;
   });
@@ -842,7 +780,7 @@ const BharatNXTPortal = () => {
             whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-2xl transition cursor-pointer border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600"
-            onClick={() => { setViewedVendor(vendor); setVendorTab('profile'); setProfileTab('overview'); }}
+            onClick={() => { setViewedVendor(vendor); setProfileTab('overview'); }}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -869,7 +807,7 @@ const BharatNXTPortal = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="max-w-4xl mx-auto">
-      <button className="mb-4 text-blue-600 dark:text-blue-400 hover:underline flex items-center" onClick={() => setVendorTab('directory')}>
+      <button className="mb-4 text-blue-600 dark:text-blue-400 hover:underline flex items-center" onClick={() => setViewedVendor(null)}>
         <ChevronLeft className="w-4 h-4 mr-1" /> Back to Directory
       </button>
       <div className="flex items-center gap-4 mb-6">
